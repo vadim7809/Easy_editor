@@ -5,7 +5,6 @@ app = QApplication([])
 
 
 window = QWidget()
-window.setWindowTitle("Easy Editor")
 window.resize(600, 400)
 
 
@@ -39,6 +38,9 @@ right_btn = QPushButton("Вправо")
 mirror_btn = QPushButton("Дзеркало")
 sharp_btn = QPushButton("Різкість")
 bw_btn = QPushButton("Ч/Б")
+
+
+
 
 btn_layout.addWidget(left_btn)
 btn_layout.addWidget(right_btn)
