@@ -24,7 +24,7 @@ app = QApplication([])
 
 
 window = QWidget()
-window.resize(600, 400)
+window.resize(800, 600)
 
 
 main_line = QHBoxLayout()
@@ -46,13 +46,19 @@ img_lbl = QLabel()
 v1_line.addWidget(img_lbl)
 
 btn_layout = QHBoxLayout()
-
+btn_layout2 = QHBoxLayout()
 
 left_btn = QPushButton("Вліво")
 right_btn = QPushButton("Вправо")
 mirror_btn = QPushButton("Дзеркало")
 sharp_btn = QPushButton("Різкість")
 bw_btn = QPushButton("Ч/Б")
+
+bright_btn = QPushButton("Зб/Яскравості")
+blur_btn = QPushButton("Розмивання")
+contra_btn = QPushButton("Контрасність")
+no_sharp_btn = QPushButton("Не різкост")
+smooth_btn= QPushButton("Зглажування")
 
 
 btn_layout.addWidget(left_btn)
@@ -62,8 +68,14 @@ btn_layout.addWidget(sharp_btn)
 btn_layout.addWidget(bw_btn)
 
 
-v1_line.addLayout(btn_layout)
+btn_layout2.addWidget(bright_btn)
+btn_layout2.addWidget(blur_btn)
+btn_layout2.addWidget(contra_btn)
+btn_layout2.addWidget(no_sharp_btn)
+btn_layout2.addWidget(smooth_btn)
 
+v1_line.addLayout(btn_layout)
+v1_line.addLayout(btn_layout2)
 
 main_line.addLayout(left_line)
 main_line.addLayout(v1_line)
@@ -101,6 +113,26 @@ class ImageProcessor:
         self.image = self.image.convert("L")
         self.show()
 
+    def bright(self):
+        self.image = ImageEnhance.Brightness(self.image).enhance(1.5)
+        self.show()
+
+    def blur(self):
+        self.image = self.image.filter(ImageFilter.BLUR)
+        self.show()
+
+    def contra(self):
+        self.image = ImageEnhance.Contrast(self.image).enhance(1.5)
+        self.show()
+
+    def no_sharp(self):
+        self.image =  self.image.filter(ImageFilter.UnsharpMask(radius=1, percent=100, threshold=1))
+        self.show()
+
+    def smooth(self):
+        self.image = self.image.filter(ImageFilter.SMOOTH   )
+        self.show()
+
 ip = ImageProcessor()
 ip.filename = "img.jpg"
 ip.load()
@@ -115,11 +147,16 @@ def open_folder():
 
 
 def show_chosen_image():
-    ip.filename= img_lbl.currentItem().text()
+    ip.filename= file_list.currentItem().text()
     ip.load()
     ip.show()
 
-bw_btn.clicked.connect(black_or_white)
+smooth_btn.clicked.connect(ip.smooth)
+no_sharp_btn.clicked.connect(ip.no_sharp)
+contra_btn.clicked.connect(ip.contra)
+blur_btn.clicked.connect(ip.blur)
+bright_btn.clicked.connect(ip.bright)
+bw_btn.clicked.connect(ip.black_or_white)
 sharp_btn.clicked.connect(ip.sharp)
 mirror_btn.clicked.connect(ip.mirror)
 right_btn.clicked.connect(ip.rotate_right)
